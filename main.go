@@ -1,23 +1,27 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/0xThomas3000/food_delivery/component/appctx"
 	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
+	"github.com/0xThomas3000/food_delivery/util"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func main() {
-	dsn := os.Getenv("MYSQL_CONN_STRING")
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.DBUserName, config.DBUserPassword, config.DBHost, config.DBPort, config.DBName)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
 	if err != nil {
 		log.Fatalln(err)
 	}
