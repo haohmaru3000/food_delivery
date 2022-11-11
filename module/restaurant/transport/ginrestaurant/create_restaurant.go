@@ -1,6 +1,7 @@
 package ginrestaurant
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/0xThomas3000/food_delivery/common"
@@ -14,6 +15,10 @@ import (
 func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := appCtx.GetMainDBConnection()
+
+		// Crash error: needs to be treated as "normal error"
+		arr := []int{}
+		log.Println(arr[0])
 
 		var data restaurantmodel.RestaurantCreate
 

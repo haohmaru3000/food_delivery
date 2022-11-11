@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/0xThomas3000/food_delivery/component/appctx"
+	"github.com/0xThomas3000/food_delivery/middleware"
 	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
 	"github.com/0xThomas3000/food_delivery/util"
@@ -28,14 +29,16 @@ func main() {
 
 	db = db.Debug()
 
+	appContext := appctx.NewAppContext(db)
+
 	r := gin.Default()
+	r.Use(middleware.Recover(appContext))
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
-
-	appContext := appctx.NewAppContext(db)
 
 	// POST restaurants
 	v1 := r.Group("/v1")
