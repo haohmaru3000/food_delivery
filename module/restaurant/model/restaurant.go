@@ -2,7 +2,10 @@ package restaurantmodel
 
 import (
 	"github.com/0xThomas3000/food_delivery/common"
+	"strings"
 )
+
+const EntityName = "Restaurant" // Tạo EntityName vì lỗi này dc dùng đi dùng lại
 
 type Restaurant struct {
 	common.SQLModel `json:",inline"`
@@ -32,3 +35,17 @@ type RestaurantUpdate struct {
 func (RestaurantUpdate) TableName() string {
 	return Restaurant{}.TableName()
 }
+
+func (res *RestaurantCreate) Validate() error {
+	res.Name = strings.TrimSpace(res.Name)
+
+	if len(res.Name) == 0 {
+		return ErrNameCannotBeEmpty
+	}
+
+	return nil
+}
+
+var (
+	ErrNameCannotBeEmpty = common.NewCustomError(nil, "restaurant name can't be blank", "ErrNameCannotBeEmpty")
+)
