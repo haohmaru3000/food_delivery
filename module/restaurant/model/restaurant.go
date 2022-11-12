@@ -17,6 +17,12 @@ func (Restaurant) TableName() string {
 	return "restaurants"
 }
 
+func (r *Restaurant) Mask(isAdminOrOwner bool) {
+	// Nếu là Admin: ko cần che giấu info nhiều | là user: cần che vài info
+	// VD: CMS lấy API thì đầy đủ, người b thường lấy API thì bị hạn chế
+	r.GenUID(common.DbTypeRestaurant)
+}
+
 type RestaurantCreate struct {
 	common.SQLModel `json:",inline"`
 	Name            string `json:"name" gorm:"column:name;"`
@@ -27,13 +33,8 @@ func (RestaurantCreate) TableName() string {
 	return Restaurant{}.TableName()
 }
 
-type RestaurantUpdate struct {
-	Name *string `json:"name" gorm:"column:name;"`
-	Addr *string `json:"addr" gorm:"column:addr;"`
-}
-
-func (RestaurantUpdate) TableName() string {
-	return Restaurant{}.TableName()
+func (data *RestaurantCreate) Mask(isAdminOrOwner bool) {
+	data.GenUID(common.DbTypeRestaurant)
 }
 
 func (res *RestaurantCreate) Validate() error {
@@ -49,3 +50,12 @@ func (res *RestaurantCreate) Validate() error {
 var (
 	ErrNameCannotBeEmpty = common.NewCustomError(nil, "restaurant name can't be blank", "ErrNameCannotBeEmpty")
 )
+
+type RestaurantUpdate struct {
+	Name *string `json:"name" gorm:"column:name;"`
+	Addr *string `json:"addr" gorm:"column:addr;"`
+}
+
+func (RestaurantUpdate) TableName() string {
+	return Restaurant{}.TableName()
+}

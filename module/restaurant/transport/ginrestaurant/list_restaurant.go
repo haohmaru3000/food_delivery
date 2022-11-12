@@ -38,7 +38,7 @@ func ListRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		}
 
 		for i := range result {
-			result[i].GenUID(common.DbTypeRestaurant)
+			result[i].Mask(false) // Chưa login => false
 		}
 
 		c.JSON(http.StatusOK, common.NewSuccessResponse(result, pagingData, filter))
