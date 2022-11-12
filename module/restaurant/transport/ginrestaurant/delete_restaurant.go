@@ -2,7 +2,6 @@ package ginrestaurant
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/component/appctx"
@@ -15,7 +14,9 @@ func DeleteRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := appCtx.GetMainDBConnection()
 
-		id, err := strconv.Atoi(c.Param("id"))
+		// id, err := strconv.Atoi(c.Param("id"))
+
+		uid, err := common.FromBase58(c.Param("id")) // Hàm đổi ngược về lại UID từ Base58
 
 		if err != nil {
 			panic(common.ErrInvalidRequest(err)) // ko panic(err) vì đây là lỗi gốc
@@ -24,7 +25,7 @@ func DeleteRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		store := restaurantstorage.NewSQLStore(db)
 		biz := restaurantbiz.NewDeleteRestaurantBiz(store)
 
-		if err := biz.DeleteRestaurant(c.Request.Context(), id); err != nil {
+		if err := biz.DeleteRestaurant(c.Request.Context(), int(uid.GetLocalID())); err != nil {
 			panic(err) // Chắc chắn là tầng business đã xử lý rồi
 		}
 
