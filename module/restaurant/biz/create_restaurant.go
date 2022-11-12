@@ -19,7 +19,7 @@ func NewCreateRestaurantBiz(store CreateRestaurantStore) *createRestaurantBiz {
 }
 
 func (biz *createRestaurantBiz) CreateRestaurant(context context.Context, data *restaurantmodel.RestaurantCreate) error {
-	if err := data.Validate(); err != nil {
+	if err := data.Validate(); err != nil { // Validate dữ liệu theo nghiệp vụ trên doc của BA (=> Validate() call phải thuộc tầng business)
 		return common.ErrInvalidRequest(err)
 	}
 

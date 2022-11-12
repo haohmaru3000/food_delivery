@@ -1,16 +1,23 @@
 package restaurantmodel
 
 import (
-	"github.com/0xThomas3000/food_delivery/common"
+	"errors"
 	"strings"
+
+	"github.com/0xThomas3000/food_delivery/common"
 )
 
+type RestaurantType string
+
+const TypeNormal RestaurantType = "normal"
+const TypePremium RestaurantType = "premium"
 const EntityName = "Restaurant" // Tạo EntityName vì lỗi này dc dùng đi dùng lại
 
 type Restaurant struct {
 	common.SQLModel `json:",inline"`
-	Name            string `json:"name" gorm:"column:name;"`
-	Addr            string `json:"addr" gorm:"column:addr;"`
+	Name            string         `json:"name" gorm:"column:name;"`
+	Addr            string         `json:"addr" gorm:"column:addr;"`
+	Type            RestaurantType `json:"type" gorm:"column:type;"` // kiểu enum (như options cho các quyền...)
 }
 
 func (Restaurant) TableName() string {
@@ -37,19 +44,15 @@ func (data *RestaurantCreate) Mask(isAdminOrOwner bool) {
 	data.GenUID(common.DbTypeRestaurant)
 }
 
-func (res *RestaurantCreate) Validate() error {
-	res.Name = strings.TrimSpace(res.Name)
+func (data *RestaurantCreate) Validate() error {
+	data.Name = strings.TrimSpace(data.Name)
 
-	if len(res.Name) == 0 {
-		return ErrNameCannotBeEmpty
+	if data.Name == "" {
+		return ErrNameIsEmpty // Chỉ cần unit test Validate() về chính xác giá trị này
 	}
 
 	return nil
 }
-
-var (
-	ErrNameCannotBeEmpty = common.NewCustomError(nil, "restaurant name can't be blank", "ErrNameCannotBeEmpty")
-)
 
 type RestaurantUpdate struct {
 	Name *string `json:"name" gorm:"column:name;"`
@@ -59,3 +62,7 @@ type RestaurantUpdate struct {
 func (RestaurantUpdate) TableName() string {
 	return Restaurant{}.TableName()
 }
+
+var (
+	ErrNameIsEmpty = errors.New("name cannot be empty") // Ko dc ghép phía trên cho Unit test => vì luôn về new pointer (ko thể so sánh dc)
+)
