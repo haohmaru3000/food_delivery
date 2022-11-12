@@ -1,8 +1,6 @@
 package ginrestaurant
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/0xThomas3000/food_delivery/common"
@@ -17,18 +15,14 @@ func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := appCtx.GetMainDBConnection()
 
-		// Crash error: needs to be treated as "normal error"
-		go func() {
-			defer func() {
-				if r := recover(); r != nil {
-					fmt.Println("Recovered:", r)
-				}
-			}()
+		// Crash error (panic xảy ra trong 1 Goroutine): needs to be treated as "normal error"
+		// go func() {
+		// 	defer common.AppRecover()
 
-			arr := []int{}
-			log.Println(arr[0])
+		// 	arr := []int{}
+		// 	log.Println(arr[0])
 
-		}()
+		// }()
 
 		var data restaurantmodel.RestaurantCreate
 
