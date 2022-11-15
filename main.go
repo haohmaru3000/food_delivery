@@ -10,6 +10,7 @@ import (
 	"github.com/0xThomas3000/food_delivery/middleware"
 	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
+	"github.com/0xThomas3000/food_delivery/module/upload/transport/ginupload"
 	"github.com/0xThomas3000/food_delivery/util"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -34,14 +35,13 @@ func main() {
 	r := gin.Default()
 	r.Use(middleware.Recover(appContext))
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	// Đăng ký link cho cái static để hiển thị hình
+	r.Static("/static", "./static") // Đi search mục "static" => gin sẽ kiếm thư mục "static" để đọc
 
-	// POST restaurants
 	v1 := r.Group("/v1")
+	v1.POST("/upload", ginupload.UploadImage(appContext))
+
+	// ROUTER GROUP for restaurants
 	restaurants := v1.Group("/restaurants")
 	restaurants.POST("/", ginrestaurant.CreateRestaurant(appContext))
 
@@ -60,7 +60,7 @@ func main() {
 		})
 	})
 
-	restaurants.GET("", ginrestaurant.ListRestaurant(appContext))
+	restaurants.GET("/", ginrestaurant.ListRestaurant(appContext))
 
 	restaurants.PATCH("/:id", func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))

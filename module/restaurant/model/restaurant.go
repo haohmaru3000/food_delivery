@@ -19,6 +19,8 @@ type Restaurant struct {
 	Addr            string         `json:"addr" gorm:"column:addr;"`
 	Type            RestaurantType `json:"type" gorm:"column:type;"` // kiểu enum (như options cho các quyền...)
 	Logo            *common.Image  `json:"logo" gorm:"logo;"`
+	Cover           *common.Images `json:"cover" gorm:"cover;"` // Có thể là 1 dạng chạy slide các ảnh...
+	// Cover           []common.Images `json:"cover" gorm:"cover;"` || ko dc sd như này
 }
 
 func (Restaurant) TableName() string {
@@ -33,9 +35,10 @@ func (r *Restaurant) Mask(isAdminOrOwner bool) {
 
 type RestaurantCreate struct {
 	common.SQLModel `json:",inline"`
-	Name            string        `json:"name" gorm:"column:name;"`
-	Addr            string        `json:"addr" gorm:"column:addr;"`
-	Logo            *common.Image `json:"logo" gorm:"logo;"`
+	Name            string         `json:"name" gorm:"column:name;"`
+	Addr            string         `json:"addr" gorm:"column:addr;"`
+	Logo            *common.Image  `json:"logo" gorm:"logo;"`
+	Cover           *common.Images `json:"cover" gorm:"cover;"`
 }
 
 func (RestaurantCreate) TableName() string {
@@ -57,9 +60,10 @@ func (data *RestaurantCreate) Validate() error {
 }
 
 type RestaurantUpdate struct {
-	Name *string       `json:"name" gorm:"column:name;"`
-	Addr *string       `json:"addr" gorm:"column:addr;"`
-	Logo *common.Image `json:"logo" gorm:"logo;"` // Phải là pointer (vì nếu ko có thì nên về nil, đừng về struct rỗng)
+	Name  *string        `json:"name" gorm:"column:name;"`
+	Addr  *string        `json:"addr" gorm:"column:addr;"`
+	Logo  *common.Image  `json:"logo" gorm:"logo;"` // Phải là pointer (vì nếu ko có thì nên về nil, đừng về struct rỗng)
+	Cover *common.Images `json:"cover" gorm:"cover;"`
 }
 
 func (RestaurantUpdate) TableName() string {
