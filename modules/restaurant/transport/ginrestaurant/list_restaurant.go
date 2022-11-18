@@ -1,14 +1,14 @@
 package ginrestaurant
 
 import (
+	"github.com/gin-gonic/gin"
 	"net/http"
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/component/appctx"
-	restaurantbiz "github.com/0xThomas3000/food_delivery/module/restaurant/biz"
-	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
-	restaurantstorage "github.com/0xThomas3000/food_delivery/module/restaurant/storage"
-	"github.com/gin-gonic/gin"
+	restaurantbiz "github.com/0xThomas3000/food_delivery/modules/restaurant/biz"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/storage"
 )
 
 func ListRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {

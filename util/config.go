@@ -11,14 +11,20 @@ type Config struct {
 	ServerPort     string `mapstructure:"PORT"`
 
 	ClientOrigin string `mapstructure:"CLIENT_ORIGIN"`
+
+	S3BucketName string `mapstructure:"S3BucketName"`
+	S3Region     string `mapstructure:"S3Region"`
+	S3APIKey     string `mapstructure:"S3APIKey"`
+	S3SecretKey  string `mapstructure:"S3SecretKey"`
+	S3Domain     string `mapstructure:"S3Domain"`
 }
 
 // LoadConfig reads configuration from file or environment variables.
 func LoadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
-	viper.SetConfigName("app")
-	viper.SetConfigType("env")
-
+	// viper.SetConfigName("app")
+	// viper.SetConfigType(".env")
+	viper.SetConfigFile(".env")
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()

@@ -1,13 +1,13 @@
 package ginrestaurant
 
 import (
+	"github.com/gin-gonic/gin"
 	"net/http"
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/component/appctx"
-	restaurantbiz "github.com/0xThomas3000/food_delivery/module/restaurant/biz"
-	restaurantstorage "github.com/0xThomas3000/food_delivery/module/restaurant/storage"
-	"github.com/gin-gonic/gin"
+	restaurantbiz "github.com/0xThomas3000/food_delivery/modules/restaurant/biz"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/storage"
 )
 
 func DeleteRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {

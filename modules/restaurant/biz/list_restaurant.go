@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/0xThomas3000/food_delivery/common"
-	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/model"
 )
 
 type ListRestaurantStore interface {

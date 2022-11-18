@@ -1,7 +1,7 @@
 package common
 
 /*
- * @author           Viet Tran <viettranx@gmail.com>
+ * @author           Referenced from Viet Tran <viettranx@gmail.com>
  * @copyright        2019 Viet Tran <viettranx@gmail.com>
  * @license          Apache-2.0
  */

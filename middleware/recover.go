@@ -1,9 +1,10 @@
 package middleware
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/component/appctx"
-	"github.com/gin-gonic/gin"
 )
 
 func Recover(ac appctx.AppContext) gin.HandlerFunc {

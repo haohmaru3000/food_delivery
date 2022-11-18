@@ -2,10 +2,10 @@ package restaurantstorage
 
 import (
 	"context"
+	"gorm.io/gorm"
 
 	"github.com/0xThomas3000/food_delivery/common"
-	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
-	"gorm.io/gorm"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/model"
 )
 
 func (s *sqlStore) FindDataWithCondition(context context.Context, condition map[string]interface{}, moreKeys ...string) (*restaurantmodel.Restaurant, error) {

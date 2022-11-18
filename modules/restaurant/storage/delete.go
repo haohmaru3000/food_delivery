@@ -2,8 +2,9 @@ package restaurantstorage
 
 import (
 	"context"
+
 	"github.com/0xThomas3000/food_delivery/common"
-	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/model"
 )
 
 func (s *sqlStore) Delete(context context.Context, id int) error {
