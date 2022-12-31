@@ -11,11 +11,13 @@ type AppContext interface {
 	UploadProvider() uploadprovider.UploadProvider
 }
 
+// A struct that implements "AppContext" interface
 type appCtx struct {
 	db             *gorm.DB
 	uploadprovider uploadprovider.UploadProvider
 }
 
+// Setters for setting 2 fields of "db", "uploadprovider"
 func NewAppContext(db *gorm.DB, uploadprovider uploadprovider.UploadProvider) *appCtx {
 	return &appCtx{
 		db:             db,
@@ -23,6 +25,7 @@ func NewAppContext(db *gorm.DB, uploadprovider uploadprovider.UploadProvider) *a
 	}
 }
 
+// Getters to get 2 fields of "db", "uploadprovider"
 func (ctx *appCtx) GetMainDBConnection() *gorm.DB {
 	return ctx.db
 }

@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 
 	"github.com/0xThomas3000/food_delivery/component/appctx"
 	"github.com/0xThomas3000/food_delivery/component/uploadprovider"
@@ -15,6 +16,7 @@ import (
 	"github.com/0xThomas3000/food_delivery/modules/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/modules/restaurant/transport/ginrestaurant"
 	"github.com/0xThomas3000/food_delivery/modules/upload/uploadtransport/ginupload"
+	"github.com/0xThomas3000/food_delivery/modules/user/transport/ginuser"
 	"github.com/0xThomas3000/food_delivery/util"
 )
 
@@ -44,6 +46,8 @@ func main() {
 
 	v1 := r.Group("/v1")
 	v1.POST("/upload", ginupload.Upload(appContext))
+
+	v1.POST("/register", ginuser.Register(appContext))
 
 	// ROUTER GROUP for restaurants
 	restaurants := v1.Group("/restaurants")

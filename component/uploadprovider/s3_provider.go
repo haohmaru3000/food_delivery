@@ -14,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+// The struct that implements the "UploadProvider" interface (by declaring "SaveFileUploaded()")
 type s3Provider struct {
 	bucketName string
 	region     string
