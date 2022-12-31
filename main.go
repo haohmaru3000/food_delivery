@@ -34,9 +34,17 @@ func main() {
 
 	db = db.Debug()
 
-	s3Provider := uploadprovider.NewS3Provider(config.S3BucketName, config.S3Region, config.S3APIKey, config.S3SecretKey, config.S3Domain)
+	s3Provider := uploadprovider.NewS3Provider(
+		config.S3BucketName,
+		config.S3Region,
+		config.S3APIKey,
+		config.S3SecretKey,
+		config.S3Domain,
+	)
 
-	appContext := appctx.NewAppContext(db, s3Provider)
+	secretKey := config.SecretKey
+
+	appContext := appctx.NewAppContext(db, s3Provider, secretKey)
 
 	r := gin.Default()
 	r.Use(middleware.Recover(appContext))
@@ -48,6 +56,7 @@ func main() {
 	v1.POST("/upload", ginupload.Upload(appContext))
 
 	v1.POST("/register", ginuser.Register(appContext))
+	v1.POST("/authenticate", ginuser.Login(appContext))
 
 	// ROUTER GROUP for restaurants
 	restaurants := v1.Group("/restaurants")

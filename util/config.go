@@ -17,6 +17,8 @@ type Config struct {
 	S3APIKey     string `mapstructure:"S3APIKey"`
 	S3SecretKey  string `mapstructure:"S3SecretKey"`
 	S3Domain     string `mapstructure:"S3Domain"`
+
+	SecretKey string `mapstructure:"SYSTEM_SECRET"`
 }
 
 // LoadConfig reads configuration from file or environment variables.

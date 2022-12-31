@@ -9,19 +9,22 @@ import (
 type AppContext interface {
 	GetMainDBConnection() *gorm.DB
 	UploadProvider() uploadprovider.UploadProvider
+	SecretKey() string
 }
 
 // A struct that implements "AppContext" interface
 type appCtx struct {
 	db             *gorm.DB
 	uploadprovider uploadprovider.UploadProvider
+	secretKey      string
 }
 
 // Setters for setting 2 fields of "db", "uploadprovider"
-func NewAppContext(db *gorm.DB, uploadprovider uploadprovider.UploadProvider) *appCtx {
+func NewAppContext(db *gorm.DB, uploadprovider uploadprovider.UploadProvider, secretKey string) *appCtx {
 	return &appCtx{
 		db:             db,
 		uploadprovider: uploadprovider,
+		secretKey:      secretKey,
 	}
 }
 
@@ -32,4 +35,8 @@ func (ctx *appCtx) GetMainDBConnection() *gorm.DB {
 
 func (ctx *appCtx) UploadProvider() uploadprovider.UploadProvider {
 	return ctx.uploadprovider
+}
+
+func (ctx *appCtx) SecretKey() string {
+	return ctx.secretKey
 }

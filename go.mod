@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.44.171
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/gin-gonic/gin v1.8.2
+	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/spf13/viper v1.14.0
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.2

@@ -2,6 +2,7 @@ package usermodel
 
 import (
 	"errors"
+
 	"github.com/0xThomas3000/food_delivery/common"
 )
 
@@ -81,10 +82,10 @@ func (UserLogin) TableName() string {
 // }
 
 var (
-	ErrUsernameOrPasswordInvalid = common.NewCustomError(
-		errors.New("username or password invalid"),
-		"username or password invalid",
-		"ErrUsernameOrPasswordInvalid",
+	ErrEmailOrPasswordInvalid = common.NewCustomError(
+		errors.New("email or password invalid"),
+		"email or password invalid",
+		"ErrEmailOrPasswordInvalid",
 	)
 
 	ErrEmailExisted = common.NewCustomError(

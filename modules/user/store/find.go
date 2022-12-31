@@ -2,9 +2,10 @@ package userstore
 
 import (
 	"context"
+	"gorm.io/gorm"
+
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/modules/user/model"
-	"gorm.io/gorm"
 )
 
 func (s *sqlStore) FindUser(ctx context.Context, conditions map[string]interface{}, moreInfo ...string) (*usermodel.User, error) {
