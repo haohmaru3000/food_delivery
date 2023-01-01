@@ -17,20 +17,21 @@ func NewTokenJWTProvider(secret string) *jwtProvider {
 
 type myClaims struct {
 	Payload tokenprovider.TokenPayload `json:"payload"`
-	jwt.StandardClaims
+	// myClaims mặc định cũng có hàm Valid() của "RegisteredClaims" vì nó đã embed "RegisteredClaims"
+	jwt.RegisteredClaims
 }
 
 func (j *jwtProvider) Generate(data tokenprovider.TokenPayload, expiry int) (*tokenprovider.Token, error) {
 	// generate the JWT
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, myClaims{
 		data,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Local().Add(time.Second * time.Duration(expiry)).Unix(),
-			IssuedAt:  time.Now().Local().Unix(),
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Local().Add(time.Second * time.Duration(expiry))),
+			IssuedAt:  jwt.NewNumericDate(time.Now().Local()),
 		},
 	})
 
-	myToken, err := t.SignedString([]byte(j.secret))
+	myToken, err := t.SignedString([]byte(j.secret)) // Đổi key thành mảng []byte và truyền vào SignedString()
 	if err != nil {
 		return nil, err
 	}
