@@ -57,6 +57,8 @@ func main() {
 
 	v1.POST("/register", ginuser.Register(appContext))
 	v1.POST("/authenticate", ginuser.Login(appContext))
+	// Hàm Profile() sẽ không thể lấy dc Context liên quan tới User nếu không thông qua "Middleware" dc ĐN trước
+	v1.GET("/profile", middleware.RequiredAuth(appContext), ginuser.Profile(appContext))
 
 	// ROUTER GROUP for restaurants
 	restaurants := v1.Group("/restaurants")
