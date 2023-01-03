@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/0xThomas3000/food_delivery/common"
+	"github.com/0xThomas3000/food_delivery/modules/user/model"
 )
 
 type RestaurantType string
@@ -15,11 +16,13 @@ const EntityName = "Restaurant" // Tạo EntityName vì lỗi này dc dùng đi 
 
 type Restaurant struct {
 	common.SQLModel `json:",inline"`
-	Name            string         `json:"name" gorm:"column:name;"`
-	Addr            string         `json:"addr" gorm:"column:addr;"`
-	Type            RestaurantType `json:"type" gorm:"column:type;"` // kiểu enum (như options cho các quyền...)
-	Logo            *common.Image  `json:"logo" gorm:"logo;"`
-	Cover           *common.Images `json:"cover" gorm:"cover;"` // Có thể là 1 dạng chạy slide các ảnh...
+	Name            string          `json:"name" gorm:"column:name;"`
+	Addr            string          `json:"addr" gorm:"column:addr;"`
+	Type            RestaurantType  `json:"type" gorm:"column:type;"` // kiểu enum (như options cho các quyền...)
+	Logo            *common.Image   `json:"logo" gorm:"column:logo;"`
+	Cover           *common.Images  `json:"cover" gorm:"column:cover;"` // Có thể là 1 dạng chạy slide các ảnh...
+	UserId          int             `json:"-" gorm:"column:user_id;"`   // Cho biết User nên dc map vào UserId này
+	User            *usermodel.User `json:"user" gorm:"preload:false;"` // ko muốn mặc định có User association khi create Restaurant (1:26:20)
 	// Cover           []common.Images `json:"cover" gorm:"cover;"` || ko dc sd như này
 }
 
@@ -31,12 +34,17 @@ func (r *Restaurant) Mask(isAdminOrOwner bool) {
 	// Nếu là Admin: ko cần che giấu info nhiều | là user: cần che vài info
 	// VD: CMS lấy API thì đầy đủ, người b thường lấy API thì bị hạn chế
 	r.GenUID(common.DbTypeRestaurant)
+
+	if u := r.User; u != nil {
+		u.Mask(isAdminOrOwner)
+	}
 }
 
 type RestaurantCreate struct {
 	common.SQLModel `json:",inline"`
 	Name            string         `json:"name" gorm:"column:name;"`
 	Addr            string         `json:"addr" gorm:"column:addr;"`
+	UserId          int            `json:"-" gorm:"column:user_id;"` // UserId = OwnerId đã dc thay thế
 	Logo            *common.Image  `json:"logo" gorm:"logo;"`
 	Cover           *common.Images `json:"cover" gorm:"cover;"`
 }

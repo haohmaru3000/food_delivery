@@ -14,5 +14,5 @@ func NewMd5Hash() *md5Hash {
 func (h *md5Hash) Hash(data string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(data))
-	return hex.EncodeToString(hasher.Sum(nil))
+	return hex.EncodeToString(hasher.Sum(nil)) // Nối []byte với 'nil', convert nó thành chuỗi Hex(0-9,a-f,A-F)
 }

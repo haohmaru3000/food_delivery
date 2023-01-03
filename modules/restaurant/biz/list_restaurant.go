@@ -29,7 +29,7 @@ func (biz *listRestaurantBiz) ListRestaurant(
 	filter *restaurantmodel.Filter,
 	paging *common.Paging,
 ) ([]restaurantmodel.Restaurant, error) {
-	result, err := biz.store.ListDataWithCondition(context, filter, paging)
+	result, err := biz.store.ListDataWithCondition(context, filter, paging, "User") // Business: muốn có dữ liệu đầy đủ ntn? -> biz level
 	if err != nil {
 		return nil, err
 	}

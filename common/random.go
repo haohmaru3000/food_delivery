@@ -17,8 +17,9 @@ func randSequence(n int) string {
 	// Cần phải chạy thêm rand.Seed(), nếu ko sẽ luôn trả về giá trị giống nhau cho các lần chạy kế tiếp.
 	// rand.Intn(10000)
 
-	for i := range b {
-		b[i] = letters[r1.Intn(99999)%len(letters)]
+	for i := range b { // Khi đã có gói Random với Source mới, loop để lấy ra random kí tự trong []letters.
+		index := r1.Intn(99999) % len(letters) // Chỉ số ngẫu nhiên trong phạm vi giới hạn mảng letters.
+		b[i] = letters[index]
 	}
 	return string(b)
 }

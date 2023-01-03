@@ -21,17 +21,17 @@ type User struct {
 	IsOnline        bool          `json:"is_online" gorm:"-"`
 }
 
-// func (u *User) GetUserId() int {
-// 	return u.Id
-// }
+func (u *User) GetUserId() int {
+	return u.Id
+}
 
-// func (u *User) GetEmail() string {
-// 	return u.Email
-// }
+func (u *User) GetEmail() string {
+	return u.Email
+}
 
-// func (u *User) GetRole() string {
-// 	return u.Role
-// }
+func (u *User) GetRole() string {
+	return u.Role
+}
 
 func (User) TableName() string {
 	return "users"

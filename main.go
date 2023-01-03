@@ -61,7 +61,7 @@ func main() {
 	v1.GET("/profile", middleware.RequiredAuth(appContext), ginuser.Profile(appContext))
 
 	// ROUTER GROUP for restaurants
-	restaurants := v1.Group("/restaurants")
+	restaurants := v1.Group("/restaurants", middleware.RequiredAuth(appContext))
 	restaurants.POST("/", ginrestaurant.CreateRestaurant(appContext))
 
 	restaurants.GET("/:id", func(c *gin.Context) {

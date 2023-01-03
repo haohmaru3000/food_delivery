@@ -15,6 +15,8 @@ func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := appCtx.GetMainDBConnection()
 
+		requester := c.MustGet(common.CurrentUser).(common.Requester) // Lấy ra người gửi truy vấn này lên
+
 		// Crash error (panic xảy ra trong 1 Goroutine): needs to be treated as "normal error"
 		// go func() {
 		// 	defer common.AppRecover()
@@ -29,6 +31,8 @@ func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		if err := c.ShouldBind(&data); err != nil {
 			panic(err)
 		}
+
+		data.UserId = requester.GetUserId()
 
 		store := restaurantstorage.NewSQLStore(db)
 		biz := restaurantbiz.NewCreateRestaurantBiz(store)
