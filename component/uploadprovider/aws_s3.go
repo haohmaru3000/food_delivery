@@ -8,10 +8,10 @@ import (
 	"net/http"
 
 	"github.com/0xThomas3000/food_delivery/common"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 // The struct that implements the "UploadProvider" interface (by declaring "SaveFileUploaded()")
@@ -21,7 +21,7 @@ type s3Provider struct {
 	apiKey     string
 	secret     string
 	domain     string
-	session    *session.Session
+	client     *s3.Client
 }
 
 func NewS3Provider(bucketName string, region string, apiKey string, secret string, domain string) *s3Provider {
@@ -33,19 +33,22 @@ func NewS3Provider(bucketName string, region string, apiKey string, secret strin
 		domain:     domain,
 	}
 
-	s3Session, err := session.NewSession(&aws.Config{
-		Region: aws.String(provider.region),
-		Credentials: credentials.NewStaticCredentials(
-			provider.apiKey, // Access key ID
-			provider.secret, // Secret access key
-			""),             // Token can be ignore
-	})
-
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("unable to load SDK config, %v", err)
 	}
 
-	provider.session = s3Session // session chỉ dùng 1 lần => NewSession ra rồi gán xài luôn ko cần New lại
+	// Using the Config value, create the s3 client
+	client := s3.NewFromConfig(cfg, func(o *s3.Options) {
+		o.Region = provider.region
+		o.Credentials = aws.NewCredentialsCache(credentials.NewStaticCredentialsProvider(
+			provider.apiKey, // Access key ID
+			provider.secret, // Secret access key
+			"",              // Token can be ignore
+		))
+	})
+
+	provider.client = client // client chỉ dùng 1 lần => NewFromConfig(...) ra rồi gán xài luôn ko cần New lại
 
 	return provider
 }
@@ -54,10 +57,10 @@ func (provider *s3Provider) SaveFileUploaded(ctx context.Context, data []byte, d
 	fileBytes := bytes.NewReader(data) // bọc data vào NewReader
 	fileType := http.DetectContentType(data)
 
-	_, err := s3.New(provider.session).PutObject(&s3.PutObjectInput{
+	_, err := provider.client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket:      aws.String(provider.bucketName),
 		Key:         aws.String(dst), // Key chính là file name
-		ACL:         aws.String("private"),
+		ACL:         "private",
 		ContentType: aws.String(fileType),
 		Body:        fileBytes, // Body: chính là io của buffer data (mảng []byte "data" muốn dc chuyển thành Body)
 	})
