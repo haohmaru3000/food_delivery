@@ -169,7 +169,7 @@ CREATE TABLE `restaurant_ratings` (
 DROP TABLE IF EXISTS `restaurants`;
 CREATE TABLE `restaurants` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `owner_id` int NOT NULL,
+  `user_id` int NOT NULL,
   `name` varchar(50) NOT NULL,
   `addr` varchar(255) NOT NULL,
   `city_id` int DEFAULT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE `restaurants` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `owner_id` (`owner_id`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE,
   KEY `city_id` (`city_id`) USING BTREE,
   KEY `status` (`status`) USING BTREE
 ) ENGINE=InnoDB;
