@@ -8,8 +8,8 @@ import (
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/component/appctx"
 	"github.com/0xThomas3000/food_delivery/component/tokenprovider/jwt"
-	"github.com/0xThomas3000/food_delivery/modules/user/model"
-	"github.com/0xThomas3000/food_delivery/modules/user/store"
+	"github.com/0xThomas3000/food_delivery/module/user/model"
+	"github.com/0xThomas3000/food_delivery/module/user/store"
 	"github.com/gin-gonic/gin"
 )
 

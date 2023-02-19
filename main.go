@@ -13,10 +13,10 @@ import (
 	"github.com/0xThomas3000/food_delivery/component/appctx"
 	"github.com/0xThomas3000/food_delivery/component/uploadprovider"
 	"github.com/0xThomas3000/food_delivery/middleware"
-	"github.com/0xThomas3000/food_delivery/modules/restaurant/model"
-	"github.com/0xThomas3000/food_delivery/modules/restaurant/transport/ginrestaurant"
-	"github.com/0xThomas3000/food_delivery/modules/upload/uploadtransport/ginupload"
-	"github.com/0xThomas3000/food_delivery/modules/user/transport/ginuser"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
+	"github.com/0xThomas3000/food_delivery/module/upload/uploadtransport/ginupload"
+	"github.com/0xThomas3000/food_delivery/module/user/transport/ginuser"
 	"github.com/0xThomas3000/food_delivery/util"
 )
 

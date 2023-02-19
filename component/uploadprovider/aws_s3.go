@@ -22,6 +22,7 @@ type s3Provider struct {
 	secret     string
 	domain     string
 	client     *s3.Client
+	// PresignClient *s3.PresignClient
 }
 
 func NewS3Provider(bucketName string, region string, apiKey string, secret string, domain string) *s3Provider {
@@ -68,6 +69,20 @@ func (provider *s3Provider) SaveFileUploaded(ctx context.Context, data []byte, d
 	if err != nil {
 		return nil, err
 	}
+
+	/***** FOR Create a presigned URL *****/
+	// var lifetimeSecs int64 = 5
+	// _, err := provider.PresignClient.PresignPutObject(context.TODO(), &s3.PutObjectInput{
+	// 	Bucket: aws.String(provider.bucketName),
+	// 	Key:    aws.String(dst),
+	// 	ACL:    "private",
+	// }, func(opts *s3.PresignOptions) {
+	// 	opts.Expires = time.Duration(lifetimeSecs * int64(time.Second))
+	// })
+	// if err != nil {
+	// 	log.Printf("Couldn't get a presigned request to put %v:%v. Here's why: %v\n",
+	// 		provider.bucketName, dst, err)
+	// }
 
 	img := &common.Image{
 		Url:       fmt.Sprintf("%s/%s", provider.domain, dst),
