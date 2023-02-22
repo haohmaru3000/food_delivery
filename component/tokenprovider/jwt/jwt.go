@@ -33,7 +33,7 @@ func (j *jwtProvider) Generate(data tokenprovider.TokenPayload, expiry int) (*to
 
 	myToken, err := t.SignedString([]byte(j.secret)) // Đổi key thành mảng []byte và truyền vào SignedString()
 	if err != nil {
-		return nil, err
+		return nil, tokenprovider.ErrEncodingToken
 	}
 
 	// return the token
