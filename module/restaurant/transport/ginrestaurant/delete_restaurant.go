@@ -13,6 +13,7 @@ import (
 func DeleteRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := appCtx.GetMainDBConnection()
+		requester := c.MustGet(common.CurrentUser).(common.Requester) // Lấy ra người gửi truy vấn này lên
 
 		// id, err := strconv.Atoi(c.Param("id"))
 
@@ -23,7 +24,7 @@ func DeleteRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		}
 
 		store := restaurantstorage.NewSQLStore(db)
-		biz := restaurantbiz.NewDeleteRestaurantBiz(store)
+		biz := restaurantbiz.NewDeleteRestaurantBiz(store, requester)
 
 		if err := biz.DeleteRestaurant(c.Request.Context(), int(uid.GetLocalID())); err != nil {
 			panic(err) // Chắc chắn là tầng business đã xử lý rồi

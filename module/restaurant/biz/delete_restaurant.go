@@ -18,10 +18,15 @@ type DeleteRestaurantStore interface {
 
 type deleteRestaurantBiz struct {
 	store DeleteRestaurantStore
+	// thêm vào field dưới -> để đảm bảo requester chỉ xoá dc nhà hàng của chính họ(họ phải sở hữu nhà hàng đó)
+	requester common.Requester // là Interface -> có thể mock nó để unit test rất dễ dàng
 }
 
-func NewDeleteRestaurantBiz(store DeleteRestaurantStore) *deleteRestaurantBiz {
-	return &deleteRestaurantBiz{store: store}
+func NewDeleteRestaurantBiz(store DeleteRestaurantStore, requester common.Requester) *deleteRestaurantBiz {
+	return &deleteRestaurantBiz{
+		store:     store,
+		requester: requester,
+	}
 }
 
 func (biz *deleteRestaurantBiz) DeleteRestaurant(context context.Context, id int) error {
@@ -35,6 +40,10 @@ func (biz *deleteRestaurantBiz) DeleteRestaurant(context context.Context, id int
 
 	if oldData.Status == 0 {
 		return common.ErrEntityDeleted(restaurantmodel.EntityName, nil) // nil vì ko có error gốc
+	}
+
+	if oldData.UserId != biz.requester.GetUserId() {
+		return common.ErrNoPermission(nil)
 	}
 
 	if err := biz.store.Delete(context, id); err != nil {
