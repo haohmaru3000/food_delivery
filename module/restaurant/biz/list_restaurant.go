@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"log"
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
@@ -16,12 +17,18 @@ type ListRestaurantStore interface {
 	) ([]restaurantmodel.Restaurant, error)
 }
 
-type listRestaurantBiz struct {
-	store ListRestaurantStore
+type LikeRestaurantStore interface {
+	// ids: id of a list of Restaurants | map[int]int: (key: restaurant id, value: số lượng User đã like Restaurant)
+	GetRestaurantLikes(ctx context.Context, ids []int) (map[int]int, error)
 }
 
-func NewListRestaurantBiz(store ListRestaurantStore) *listRestaurantBiz {
-	return &listRestaurantBiz{store: store}
+type listRestaurantBiz struct {
+	store     ListRestaurantStore
+	likeStore LikeRestaurantStore
+}
+
+func NewListRestaurantBiz(store ListRestaurantStore, likeStore LikeRestaurantStore) *listRestaurantBiz {
+	return &listRestaurantBiz{store: store, likeStore: likeStore}
 }
 
 func (biz *listRestaurantBiz) ListRestaurant(
@@ -33,5 +40,23 @@ func (biz *listRestaurantBiz) ListRestaurant(
 	if err != nil {
 		return nil, err
 	}
+
+	ids := make([]int, len(result))
+
+	for i := range ids {
+		ids[i] = result[i].Id
+	}
+
+	likeMap, err := biz.likeStore.GetRestaurantLikes(context, ids)
+
+	if err != nil {
+		log.Println(err)
+		return result, nil
+	}
+
+	for i, item := range result {
+		result[i].LikedCount = likeMap[item.Id]
+	}
+
 	return result, nil
 }

@@ -9,6 +9,7 @@ import (
 	restaurantbiz "github.com/0xThomas3000/food_delivery/module/restaurant/biz"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
+	"github.com/0xThomas3000/food_delivery/module/restaurantlike/storage"
 )
 
 func ListRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
@@ -31,7 +32,8 @@ func ListRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		filter.Status = []int{1} // Set quyền
 
 		store := restaurantstorage.NewSQLStore(db)
-		biz := restaurantbiz.NewListRestaurantBiz(store)
+		likeStore := restaurantlikestorage.NewSQLStore(db)
+		biz := restaurantbiz.NewListRestaurantBiz(store, likeStore)
 
 		result, err := biz.ListRestaurant(c.Request.Context(), &filter, &pagingData)
 
