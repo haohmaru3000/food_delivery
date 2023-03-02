@@ -105,5 +105,14 @@ func main() {
 
 	restaurants.DELETE("/:id", ginrestaurant.DeleteRestaurant(appContext))
 
+	admin := v1.Group("/admin",
+		middleware.RequiredAuth(appContext),
+		middleware.RoleRequired(appContext, "admin", "mod", "user"),
+	)
+
+	{
+		admin.GET("/profile", ginuser.Profile(appContext))
+	}
+
 	r.Run()
 }
