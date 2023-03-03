@@ -1,15 +1,16 @@
 package ginuser
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/0xThomas3000/food_delivery/common"
-	"github.com/0xThomas3000/food_delivery/component/appctx"
-	"github.com/0xThomas3000/food_delivery/component/hasher"
-	"github.com/0xThomas3000/food_delivery/module/user/biz"
-	"github.com/0xThomas3000/food_delivery/module/user/model"
-	"github.com/0xThomas3000/food_delivery/module/user/store"
+	"github.com/0xThomas3000/food_delivery/components/appctx"
+	"github.com/0xThomas3000/food_delivery/components/hasher"
+	userbiz "github.com/0xThomas3000/food_delivery/module/user/biz"
+	usermodel "github.com/0xThomas3000/food_delivery/module/user/model"
+	userstore "github.com/0xThomas3000/food_delivery/module/user/store"
 )
 
 func Register(appCtx appctx.AppContext) func(*gin.Context) {

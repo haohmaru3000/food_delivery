@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/0xThomas3000/food_delivery/common"
-	"github.com/0xThomas3000/food_delivery/component/tokenprovider"
-	"github.com/0xThomas3000/food_delivery/module/user/model"
+	"github.com/0xThomas3000/food_delivery/components/tokenprovider"
+	usermodel "github.com/0xThomas3000/food_delivery/module/user/model"
 )
 
 type LoginStorage interface {

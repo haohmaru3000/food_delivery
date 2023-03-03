@@ -1,4 +1,4 @@
-package main
+package routes
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/0xThomas3000/food_delivery/component/appctx"
+	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/middleware"
 	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
@@ -14,7 +14,7 @@ import (
 	"github.com/0xThomas3000/food_delivery/module/user/transport/ginuser"
 )
 
-func setupRoute(appContext appctx.AppContext, v1 *gin.RouterGroup) {
+func SetupRoute(appContext appctx.AppContext, v1 *gin.RouterGroup) {
 	v1.POST("/upload", ginupload.Upload(appContext))
 
 	v1.POST("/register", ginuser.Register(appContext))

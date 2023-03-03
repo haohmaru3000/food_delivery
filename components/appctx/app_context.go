@@ -3,7 +3,7 @@ package appctx
 import (
 	"gorm.io/gorm"
 
-	"github.com/0xThomas3000/food_delivery/component/uploadprovider"
+	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
 )
 
 type AppContext interface {

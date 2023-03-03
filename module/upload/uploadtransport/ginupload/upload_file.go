@@ -1,12 +1,13 @@
 package ginupload
 
 import (
-	"github.com/gin-gonic/gin"
 	_ "image/jpeg"
 	_ "image/png"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/0xThomas3000/food_delivery/common"
-	"github.com/0xThomas3000/food_delivery/component/appctx"
+	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/module/upload/uploadbusiness"
 )
 

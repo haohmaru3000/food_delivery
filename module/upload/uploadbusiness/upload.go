@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/0xThomas3000/food_delivery/common"
-	"github.com/0xThomas3000/food_delivery/component/uploadprovider"
+	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
 	"github.com/0xThomas3000/food_delivery/module/upload/uploadmodel"
 )
 

@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/0xThomas3000/food_delivery/common"
-	"github.com/0xThomas3000/food_delivery/component/appctx"
+	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/gin-gonic/gin"
 )
 

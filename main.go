@@ -8,9 +8,10 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"github.com/0xThomas3000/food_delivery/component/appctx"
-	"github.com/0xThomas3000/food_delivery/component/uploadprovider"
+	"github.com/0xThomas3000/food_delivery/components/appctx"
+	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
 	"github.com/0xThomas3000/food_delivery/middleware"
+	"github.com/0xThomas3000/food_delivery/routes"
 	"github.com/0xThomas3000/food_delivery/util"
 )
 
@@ -48,8 +49,8 @@ func main() {
 
 	v1 := r.Group("/v1")
 
-	setupRoute(appContext, v1)
-	setupAdminRoute(appContext, v1)
+	routes.SetupRoute(appContext, v1)
+	routes.SetupAdminRoute(appContext, v1)
 
 	r.Run()
 }

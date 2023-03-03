@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	"github.com/0xThomas3000/food_delivery/common"
-	"github.com/0xThomas3000/food_delivery/component/appctx"
-	"github.com/0xThomas3000/food_delivery/component/tokenprovider/jwt"
-	"github.com/0xThomas3000/food_delivery/module/user/model"
-	"github.com/0xThomas3000/food_delivery/module/user/store"
+	"github.com/0xThomas3000/food_delivery/components/appctx"
+	"github.com/0xThomas3000/food_delivery/components/tokenprovider/jwt"
+	usermodel "github.com/0xThomas3000/food_delivery/module/user/model"
+	userstore "github.com/0xThomas3000/food_delivery/module/user/store"
 	"github.com/gin-gonic/gin"
 )
 
