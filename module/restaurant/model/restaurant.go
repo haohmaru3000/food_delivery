@@ -23,7 +23,7 @@ type Restaurant struct {
 	UserId          int                `json:"-" gorm:"column:user_id;"`   // Cho biết User nên dc map vào UserId này
 	User            *common.SimpleUser `json:"user" gorm:"preload:false;"` // ko muốn mặc định có User association khi create Restaurant (1:26:20)
 	LikedCount      int                `json:"liked_count" gorm:"-"`
-	// Cover           []common.Images `json:"cover" gorm:"cover;"` || ko dc sd như này
+	// Cover           []common.Images `json:"cover" gorm:"column:cover;"` || ko dc sd như này
 }
 
 func (Restaurant) TableName() string {
@@ -45,8 +45,8 @@ type RestaurantCreate struct {
 	Name            string         `json:"name" gorm:"column:name;"`
 	Addr            string         `json:"addr" gorm:"column:addr;"`
 	UserId          int            `json:"-" gorm:"column:user_id;"` // UserId = OwnerId đã dc thay thế
-	Logo            *common.Image  `json:"logo" gorm:"logo;"`
-	Cover           *common.Images `json:"cover" gorm:"cover;"`
+	Logo            *common.Image  `json:"logo" gorm:"column:logo;"`
+	Cover           *common.Images `json:"cover" gorm:"column:cover;"`
 }
 
 func (RestaurantCreate) TableName() string {
@@ -70,8 +70,8 @@ func (data *RestaurantCreate) Validate() error {
 type RestaurantUpdate struct {
 	Name  *string        `json:"name" gorm:"column:name;"`
 	Addr  *string        `json:"addr" gorm:"column:addr;"`
-	Logo  *common.Image  `json:"logo" gorm:"logo;"` // Phải là pointer (vì nếu ko có thì nên về nil, đừng về struct rỗng)
-	Cover *common.Images `json:"cover" gorm:"cover;"`
+	Logo  *common.Image  `json:"logo" gorm:"column:logo;"` // Phải là pointer (vì nếu ko có thì nên về nil, đừng về struct rỗng)
+	Cover *common.Images `json:"cover" gorm:"column:cover;"`
 }
 
 func (RestaurantUpdate) TableName() string {
