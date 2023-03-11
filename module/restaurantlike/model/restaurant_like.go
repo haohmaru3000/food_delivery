@@ -1,7 +1,6 @@
 package rstlikemodel
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/0xThomas3000/food_delivery/common"
@@ -18,6 +17,11 @@ type Like struct {
 
 func (Like) TableName() string { return "restaurant_likes" }
 
+type LikeDelete struct {
+	RestaurantId int `json:"restaurant_id" gorm:"column:restaurant_id;"`
+	UserId       int `json:"user_id" gorm:"column:user_id;"`
+}
+
 // func (l *Like) GetRestaurantId() int {
 // 	return l.RestaurantId
 // }
@@ -29,15 +33,15 @@ func (l *Like) GetUserId() int {
 func ErrCannotLikeRestaurant(err error) *common.AppError {
 	return common.NewCustomError(
 		err,
-		fmt.Sprintf("Cannot like this restaurant"),
-		fmt.Sprintf("ErrCannotLikeRestaurant"),
+		"cannot like this restaurant",
+		"ErrCannotLikeRestaurant",
 	)
 }
 
-func ErrCannotUnlikeRestaurant(err error) *common.AppError {
+func ErrCannotDislikeRestaurant(err error) *common.AppError {
 	return common.NewCustomError(
 		err,
-		fmt.Sprintf("Cannot unlike this restaurant"),
-		fmt.Sprintf("ErrCannotUnlikeRestaurant"),
+		"cannot dislike this restaurant",
+		"ErrCannotDislikeRestaurant",
 	)
 }
