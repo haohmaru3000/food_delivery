@@ -10,6 +10,7 @@ import (
 	"github.com/0xThomas3000/food_delivery/middleware"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
+	"github.com/0xThomas3000/food_delivery/module/restaurantlike/transport/ginrstlike"
 	"github.com/0xThomas3000/food_delivery/module/upload/transport/ginupload"
 	"github.com/0xThomas3000/food_delivery/module/user/transport/ginuser"
 )
@@ -68,4 +69,6 @@ func SetupRoute(appContext appctx.AppContext, v1 *gin.RouterGroup) {
 	})
 
 	restaurants.DELETE("/:id", ginrestaurant.DeleteRestaurant(appContext))
+
+	restaurants.POST("/:id/like", ginrstlike.UserLikeRestaurant(appContext))
 }
