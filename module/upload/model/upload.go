@@ -10,7 +10,7 @@ const EntityName = "Upload"
 
 type Upload struct {
 	common.SQLModel `json:",inline"`
-	common.Image    `json:",inline"`
+	*common.Image   `json:",inline"`
 }
 
 func (Upload) TableName() string {

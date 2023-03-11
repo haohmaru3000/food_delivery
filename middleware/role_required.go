@@ -3,9 +3,10 @@ package middleware
 import (
 	"errors"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	"github.com/gin-gonic/gin"
 )
 
 func RoleRequired(appCtx appctx.AppContext, allowRoles ...string) func(c *gin.Context) {

@@ -7,8 +7,8 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	restaurantbiz "github.com/0xThomas3000/food_delivery/module/restaurant/biz"
-	restaurantstorage "github.com/0xThomas3000/food_delivery/module/restaurant/storage"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/biz"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
 )
 
 func DeleteRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {

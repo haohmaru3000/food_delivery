@@ -1,12 +1,13 @@
-package restaurantlikestorage
+package rstlikestorage
 
 import (
 	"context"
+
 	"github.com/0xThomas3000/food_delivery/common"
-	restaurantlikemodel "github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
+	"github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
 )
 
-func (s *sqlStore) Create(ctx context.Context, data *restaurantlikemodel.Like) error {
+func (s *sqlStore) Create(ctx context.Context, data *rstlikemodel.Like) error {
 	db := s.db
 
 	if err := db.Create(data).Error; err != nil {

@@ -1,12 +1,14 @@
-package restaurantlikestorage
+package rstlikestorage
 
 import (
 	"context"
 	"fmt"
-	"github.com/0xThomas3000/food_delivery/common"
-	restaurantlikemodel "github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
-	"github.com/btcsuite/btcutil/base58"
 	"time"
+
+	"github.com/btcsuite/btcutil/base58"
+
+	"github.com/0xThomas3000/food_delivery/common"
+	"github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
 )
 
 const timeLayout = "2006-01-02T15:04:05.999999"
@@ -22,7 +24,7 @@ func (s *sqlStore) GetRestaurantLikes(ctx context.Context, ids []int) (map[int]i
 
 	var listLike []sqlData
 
-	if err := s.db.Table(restaurantlikemodel.Like{}.TableName()).
+	if err := s.db.Table(rstlikemodel.Like{}.TableName()).
 		Select("restaurant_id, count(restaurant_id) as count").
 		Where("restaurant_id in (?)", ids).
 		Group("restaurant_id").Find(&listLike).Error; err != nil {
@@ -39,15 +41,15 @@ func (s *sqlStore) GetRestaurantLikes(ctx context.Context, ids []int) (map[int]i
 
 func (s *sqlStore) GetUsersLikeRestaurant(ctx context.Context,
 	conditions map[string]interface{},
-	filter *restaurantlikemodel.Filter,
+	filter *rstlikemodel.Filter,
 	paging *common.Paging,
 	moreKeys ...string,
 ) ([]common.SimpleUser, error) {
-	var result []restaurantlikemodel.Like
+	var result []rstlikemodel.Like
 
 	db := s.db
 
-	db = db.Table(restaurantlikemodel.Like{}.TableName()).Where(conditions)
+	db = db.Table(rstlikemodel.Like{}.TableName()).Where(conditions)
 
 	if v := filter; v != nil {
 		if v.RestaurantId > 0 {

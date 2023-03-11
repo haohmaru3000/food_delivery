@@ -8,9 +8,9 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/middleware"
-	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
-	"github.com/0xThomas3000/food_delivery/module/upload/uploadtransport/ginupload"
+	"github.com/0xThomas3000/food_delivery/module/upload/transport/ginupload"
 	"github.com/0xThomas3000/food_delivery/module/user/transport/ginuser"
 )
 

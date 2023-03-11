@@ -1,4 +1,4 @@
-package restaurantlikestorage
+package rstlikestorage
 
 import "gorm.io/gorm"
 

@@ -7,11 +7,11 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	restaurantbiz "github.com/0xThomas3000/food_delivery/module/restaurant/biz"
-	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
-	restaurantrepo "github.com/0xThomas3000/food_delivery/module/restaurant/repository"
-	restaurantstorage "github.com/0xThomas3000/food_delivery/module/restaurant/storage"
-	restaurantlikestorage "github.com/0xThomas3000/food_delivery/module/restaurantlike/storage"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/biz"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/repository"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
+	"github.com/0xThomas3000/food_delivery/module/restaurantlike/storage"
 )
 
 func ListRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
@@ -34,7 +34,7 @@ func ListRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		filter.Status = []int{1} // Set quyền
 
 		store := restaurantstorage.NewSQLStore(db)
-		likeStore := restaurantlikestorage.NewSQLStore(db)
+		likeStore := rstlikestorage.NewSQLStore(db)
 		repo := restaurantrepo.NewListRestaurantRepo(store, likeStore)
 		biz := restaurantbiz.NewListRestaurantBiz(repo)
 

@@ -1,4 +1,4 @@
-package restaurantlikemodel
+package rstlikemodel
 
 import (
 	"fmt"

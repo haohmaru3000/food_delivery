@@ -8,7 +8,7 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	"github.com/0xThomas3000/food_delivery/module/upload/uploadbusiness"
+	"github.com/0xThomas3000/food_delivery/module/upload/biz"
 )
 
 func Upload(appCtx appctx.AppContext) func(*gin.Context) {
@@ -39,7 +39,7 @@ func Upload(appCtx appctx.AppContext) func(*gin.Context) {
 
 		//imgStore := uploadstorage.NewSQLStore(db)
 		// làm cách nào vận chuyển UploadProvider vào tới Transport này? => dùng "appCtx"
-		biz := uploadbusiness.NewUploadBiz(appCtx.UploadProvider(), nil)                    // business lên
+		biz := uploadbiz.NewUploadBiz(appCtx.UploadProvider(), nil)                         // business lên
 		img, err := biz.Upload(c.Request.Context(), dataBytes, folder, fileHeader.Filename) // lấy mảng bytes(toàn bộ dữ liệu của file) gọi qua business
 
 		if err != nil {

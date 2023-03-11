@@ -9,9 +9,9 @@ import (
 	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/components/hasher"
 	"github.com/0xThomas3000/food_delivery/components/tokenprovider/jwt"
-	userbiz "github.com/0xThomas3000/food_delivery/module/user/biz"
-	usermodel "github.com/0xThomas3000/food_delivery/module/user/model"
-	userstore "github.com/0xThomas3000/food_delivery/module/user/store"
+	"github.com/0xThomas3000/food_delivery/module/user/biz"
+	"github.com/0xThomas3000/food_delivery/module/user/model"
+	"github.com/0xThomas3000/food_delivery/module/user/storage"
 )
 
 func Login(appCtx appctx.AppContext) gin.HandlerFunc {
@@ -25,7 +25,7 @@ func Login(appCtx appctx.AppContext) gin.HandlerFunc {
 		db := appCtx.GetMainDBConnection()
 		tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
 
-		store := userstore.NewSQLStore(db)
+		store := userstorage.NewSQLStore(db)
 		md5 := hasher.NewMd5Hash()
 
 		business := userbiz.NewLoginBusiness(store, tokenProvider, md5, 60*60*24*30)

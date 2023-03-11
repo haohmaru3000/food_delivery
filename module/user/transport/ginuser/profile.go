@@ -3,9 +3,10 @@ package ginuser
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	"github.com/gin-gonic/gin"
 )
 
 func Profile(appCtx appctx.AppContext) func(*gin.Context) {

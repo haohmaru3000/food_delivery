@@ -3,8 +3,9 @@ package jwt
 import (
 	"time"
 
-	"github.com/0xThomas3000/food_delivery/components/tokenprovider"
 	"github.com/golang-jwt/jwt/v4"
+
+	"github.com/0xThomas3000/food_delivery/components/tokenprovider"
 )
 
 type jwtProvider struct {

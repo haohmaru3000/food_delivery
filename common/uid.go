@@ -1,11 +1,5 @@
 package common
 
-/*
- * @author           Referenced from Viet Tran <viettranx@gmail.com>
- * @copyright        2019 Viet Tran <viettranx@gmail.com>
- * @license          Apache-2.0
- */
-
 import (
 	"database/sql/driver"
 	"errors"

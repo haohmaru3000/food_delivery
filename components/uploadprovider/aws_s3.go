@@ -7,11 +7,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+
+	"github.com/0xThomas3000/food_delivery/common"
 )
 
 // The struct that implements the "UploadProvider" interface (by declaring "SaveFileUploaded()")

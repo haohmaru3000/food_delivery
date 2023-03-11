@@ -1,4 +1,4 @@
-package uploadbusiness
+package uploadbiz
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
-	"github.com/0xThomas3000/food_delivery/module/upload/uploadmodel"
+	"github.com/0xThomas3000/food_delivery/module/upload/model"
 )
 
 type CreateImageStorage interface {

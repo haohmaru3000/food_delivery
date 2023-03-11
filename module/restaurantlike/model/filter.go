@@ -1,4 +1,4 @@
-package restaurantlikemodel
+package rstlikemodel
 
 // To list which Users has liked RestaurantId
 type Filter struct {

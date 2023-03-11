@@ -7,9 +7,9 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	restaurantbiz "github.com/0xThomas3000/food_delivery/module/restaurant/biz"
-	restaurantmodel "github.com/0xThomas3000/food_delivery/module/restaurant/model"
-	restaurantstorage "github.com/0xThomas3000/food_delivery/module/restaurant/storage"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/biz"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
 )
 
 func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
