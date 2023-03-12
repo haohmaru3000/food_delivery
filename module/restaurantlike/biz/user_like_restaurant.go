@@ -6,7 +6,9 @@ import (
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
 )
 
-// Need one more Store (for Finding a Restaurant which has been liked yet?) (-1:31:0)
+// Need 2 one more Store:
+// +	Checking if this Restaurant exists -> If yes, the user can like it?
+// +  Checking whether this Restaurant has been liked or not? (-1:31:0)
 type UserLikeRestaurantStore interface {
 	Create(ctx context.Context, data *rstlikemodel.Like) error
 }

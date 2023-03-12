@@ -8,7 +8,9 @@ import (
 )
 
 func (s *sqlStore) Delete(ctx context.Context, data *rstlikemodel.LikeDelete) error {
-	db := s.db.Where("user_id = ? and restaurant_id = ?", data.UserId, data.RestaurantId).Delete(&data)
+	db := s.db.Table(rstlikemodel.LikeDelete{}.TableName()).
+		Where("user_id = ? and restaurant_id = ?", data.UserId, data.RestaurantId).
+		Delete(&data)
 
 	if err := db.Error; err != nil {
 		return common.ErrDB(err)
