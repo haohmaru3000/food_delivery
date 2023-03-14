@@ -7,6 +7,7 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/biz"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/storage"
@@ -25,8 +26,8 @@ func UserDislikeRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		requester := c.MustGet(common.CurrentUser).(common.Requester)
 
 		store := rstlikestorage.NewSQLStore(appCtx.GetMainDBConnection())
-		//incStore := rstlikestorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := rstlikebiz.NewUserDislikeRestaurantBiz(store)
+		decStore := restaurantstorage.NewSQLStore(appCtx.GetMainDBConnection())
+		biz := rstlikebiz.NewUserDislikeRestaurantBiz(store, decStore)
 
 		likeDelete := &rstlikemodel.LikeDelete{
 			RestaurantId: int(uid.GetLocalID()),
