@@ -14,5 +14,7 @@ func (s *sqlStore) Create(ctx context.Context, data *rstlikemodel.Like) error {
 		return common.ErrDB(err)
 	}
 
+	// db.Exec("Update restaurants SET liked_count = liked_count + 1 where id = ?", data.RestaurantId) -> Very bad way to do
+
 	return nil
 }

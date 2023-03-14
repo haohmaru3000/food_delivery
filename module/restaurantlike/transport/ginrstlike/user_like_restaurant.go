@@ -7,6 +7,7 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
+	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/biz"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/storage"
@@ -31,7 +32,8 @@ func UserLikeRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		}
 
 		store := rstlikestorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := rstlikebiz.NewUserLikeRestaurantBiz(store)
+		incStore := restaurantstorage.NewSQLStore(appCtx.GetMainDBConnection())
+		biz := rstlikebiz.NewUserLikeRestaurantBiz(store, incStore)
 
 		if err := biz.LikeRestaurant(c.Request.Context(), &data); err != nil {
 			panic(err)

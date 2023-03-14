@@ -2,7 +2,6 @@ package restaurantrepo
 
 import (
 	"context"
-	"log"
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
@@ -16,19 +15,18 @@ type ListRestaurantStore interface {
 	) ([]restaurantmodel.Restaurant, error)
 }
 
-type LikeRestaurantStore interface {
-	GetRestaurantLikes(ctx context.Context, ids []int) (map[int]int, error)
-}
+// type LikeRestaurantStore interface {
+// 	GetRestaurantLikes(ctx context.Context, ids []int) (map[int]int, error)
+// }
 
 type listRestaurantRepo struct {
-	store     ListRestaurantStore
-	likeStore LikeRestaurantStore
+	store ListRestaurantStore
+	// likeStore LikeRestaurantStore
 }
 
-func NewListRestaurantRepo(store ListRestaurantStore, likeStore LikeRestaurantStore) *listRestaurantRepo {
+func NewListRestaurantRepo(store ListRestaurantStore) *listRestaurantRepo {
 	return &listRestaurantRepo{
-		store:     store,
-		likeStore: likeStore,
+		store: store,
 	}
 }
 
@@ -43,24 +41,24 @@ func (biz *listRestaurantRepo) ListRestaurant(
 		return nil, common.ErrCannotListEntity(restaurantmodel.EntityName, err)
 	}
 
-	ids := make([]int, len(result))
+	// ids := make([]int, len(result))
 
-	for i := range result {
-		ids[i] = result[i].Id
-	}
+	// for i := range result {
+	// 	ids[i] = result[i].Id
+	// }
 
-	likeMap, err := biz.likeStore.GetRestaurantLikes(ctx, ids)
+	// likeMap, err := biz.likeStore.GetRestaurantLikes(ctx, ids)
 
-	if err != nil {
-		log.Println("Cannot get restaurant likes:", err)
-		return result, nil
-	}
+	// if err != nil {
+	// 	log.Println("Cannot get restaurant likes:", err)
+	// 	return result, nil
+	// }
 
-	if v := likeMap; v != nil {
-		for i, item := range result {
-			result[i].LikedCount = likeMap[item.Id]
-		}
-	}
+	// if v := likeMap; v != nil {
+	// 	for i, item := range result {
+	// 		result[i].LikedCount = likeMap[item.Id]
+	// 	}
+	// }
 
 	// List restaurant only has liked_count > 10
 

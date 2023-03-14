@@ -22,7 +22,7 @@ type Restaurant struct {
 	Cover           *common.Images     `json:"cover" gorm:"column:cover;"` // Có thể là 1 dạng chạy slide các ảnh...
 	UserId          int                `json:"-" gorm:"column:user_id;"`   // Cho biết User nên dc map vào UserId này
 	User            *common.SimpleUser `json:"user" gorm:"preload:false;"` // ko muốn mặc định có User association khi create Restaurant (1:26:20)
-	LikedCount      int                `json:"liked_count" gorm:"-"`
+	LikedCount      int                `json:"liked_count" gorm:"column:liked_count"`
 	// Cover           []common.Images `json:"cover" gorm:"column:cover;"` || ko dc sd như này
 }
 
