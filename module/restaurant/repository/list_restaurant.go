@@ -30,12 +30,12 @@ func NewListRestaurantRepo(store ListRestaurantStore) *listRestaurantRepo {
 	}
 }
 
-func (biz *listRestaurantRepo) ListRestaurant(
+func (repo *listRestaurantRepo) ListRestaurant(
 	ctx context.Context,
 	filter *restaurantmodel.Filter,
 	paging *common.Paging,
 ) ([]restaurantmodel.Restaurant, error) {
-	result, err := biz.store.ListDataWithCondition(ctx, filter, paging, "User")
+	result, err := repo.store.ListDataWithCondition(ctx, filter, paging, "User")
 
 	if err != nil {
 		return nil, common.ErrCannotListEntity(restaurantmodel.EntityName, err)
@@ -47,7 +47,7 @@ func (biz *listRestaurantRepo) ListRestaurant(
 	// 	ids[i] = result[i].Id
 	// }
 
-	// likeMap, err := biz.likeStore.GetRestaurantLikes(ctx, ids)
+	// likeMap, err := repo.likeStore.GetRestaurantLikes(ctx, ids)
 
 	// if err != nil {
 	// 	log.Println("Cannot get restaurant likes:", err)
