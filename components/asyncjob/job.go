@@ -24,8 +24,8 @@ const (
 )
 
 var (
-	// Khi job failed -> lần retry đầu hẹn 10s, lần 2 hẹn thêm 5s(10s + 5s = 15s), lần 3 = 16s
-	defaultRetryTime = []time.Duration{time.Second, time.Second * 5, time.Second * 10}
+	// Khi job failed -> lần retry đầu hẹn 4s, lần 2 hẹn thêm 2s(4s + 2s = 6s), lần 3 = 7s
+	defaultRetryTime = []time.Duration{time.Second, time.Second * 2, time.Second * 4}
 )
 
 type JobHandler func(ctx context.Context) error
