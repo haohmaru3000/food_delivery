@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"log"
 	"time"
 
@@ -14,8 +13,8 @@ func main() {
 		time.Sleep(time.Second)
 		log.Println("I am job 1")
 
-		// return nil
-		return errors.New("something went wrong at job 1")
+		return nil
+		// return errors.New("something went wrong at job 1")
 	})
 
 	job2 := asyncjob.NewJob(func(ctx context.Context) error {
@@ -32,7 +31,7 @@ func main() {
 		return nil
 	})
 
-	group := asyncjob.NewGroup(false, job1, job2, job3)
+	group := asyncjob.NewGroup(true, job1, job2, job3) // True: to make 3 jobs run concurrently
 
 	if err := group.Run(context.Background()); err != nil {
 		log.Println(err)

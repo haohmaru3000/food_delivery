@@ -77,8 +77,7 @@ func NewJob(handler JobHandler) *job {
 func (j *job) Execute(ctx context.Context) error {
 	j.state = StateRunning // Assign State to "Running"
 
-	var err error
-	err = j.handler(ctx)
+	var err error = j.handler(ctx)
 
 	if err != nil {
 		j.state = StateFailed

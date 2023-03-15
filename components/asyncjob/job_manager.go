@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"sync"
+
+	"github.com/0xThomas3000/food_delivery/common"
 )
 
 type group struct {
@@ -41,20 +43,22 @@ func NewGroup(isConcurrent bool, jobs ...Job) *group {
 //}
 
 func (g *group) Run(ctx context.Context) error {
-	// g.wg.Add(len(g.jobs))
+	// Waitgroup: use it to check when "all of n running Goroutines complete"
+	g.wg.Add(len(g.jobs))
 
 	errChan := make(chan error, len(g.jobs))
 
-	for i, _ := range g.jobs {
-		// if g.isConcurrent {
-		// 	// Do this instead
-		// 	go func(aj Job) {
-		// 		errChan <- g.runJob(ctx, aj)
-		// 		g.wg.Done()
-		// 	}(g.jobs[i])
+	for i := range g.jobs {
+		if g.isConcurrent {
+			// Do this instead
+			go func(aj Job) {
+				defer common.AppRecover() // Service still lives if there is an crash error occurred
+				errChan <- g.runJob(ctx, aj)
+				g.wg.Done()
+			}(g.jobs[i])
 
-		// 	continue
-		// }
+			continue
+		}
 
 		job := g.jobs[i]
 
@@ -64,9 +68,11 @@ func (g *group) Run(ctx context.Context) error {
 			return err
 		}
 
-		errChan <- g.runJob(ctx, job)
-		// g.wg.Done()
+		errChan <- err
+		g.wg.Done()
 	}
+
+	g.wg.Wait() // We put this here to prevent Goroutine's leak
 
 	var err error
 
@@ -77,7 +83,8 @@ func (g *group) Run(ctx context.Context) error {
 		}
 	}
 
-	// g.wg.Wait()
+	log.Println("Done group")
+
 	return err
 }
 
