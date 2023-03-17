@@ -7,14 +7,12 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/biz"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/model"
 	"github.com/0xThomas3000/food_delivery/module/restaurantlike/storage"
 )
 
 // DELETE /v1/restaurants/:id/dislike
-
 func UserDislikeRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid, err := common.FromBase58(c.Param("id"))
@@ -26,8 +24,8 @@ func UserDislikeRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 		requester := c.MustGet(common.CurrentUser).(common.Requester)
 
 		store := rstlikestorage.NewSQLStore(appCtx.GetMainDBConnection())
-		decStore := restaurantstorage.NewSQLStore(appCtx.GetMainDBConnection())
-		biz := rstlikebiz.NewUserDislikeRestaurantBiz(store, decStore)
+		// decStore := restaurantstorage.NewSQLStore(appCtx.GetMainDBConnection())
+		biz := rstlikebiz.NewUserDislikeRestaurantBiz(store, appCtx.GetPubsub())
 
 		likeDelete := &rstlikemodel.LikeDelete{
 			RestaurantId: int(uid.GetLocalID()),

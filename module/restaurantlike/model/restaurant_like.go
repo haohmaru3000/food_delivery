@@ -17,6 +17,14 @@ type Like struct {
 
 func (Like) TableName() string { return "restaurant_likes" }
 
+func (l *Like) GetRestaurantId() int {
+	return l.RestaurantId
+}
+
+// func (l *Like) GetUserId() int {
+// 	return l.UserId
+// }
+
 type LikeDelete struct {
 	RestaurantId int `json:"restaurant_id" gorm:"column:restaurant_id;"`
 	UserId       int `json:"user_id" gorm:"column:user_id;"`
@@ -26,13 +34,13 @@ func (LikeDelete) TableName() string {
 	return Like{}.TableName()
 }
 
-// func (l *Like) GetRestaurantId() int {
-// 	return l.RestaurantId
-// }
-
-func (l *Like) GetUserId() int {
-	return l.UserId
+func (l *LikeDelete) GetRestaurantId() int {
+	return l.RestaurantId
 }
+
+// func (l *LikeDelete) GetUserId() int {
+// 	return l.UserId
+// }
 
 func ErrCannotLikeRestaurant(err error) *common.AppError {
 	return common.NewCustomError(

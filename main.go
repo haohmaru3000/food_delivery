@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -11,7 +12,9 @@ import (
 	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
 	"github.com/0xThomas3000/food_delivery/middleware"
+	"github.com/0xThomas3000/food_delivery/pubsub/localpb"
 	"github.com/0xThomas3000/food_delivery/routes"
+	"github.com/0xThomas3000/food_delivery/subscriber"
 	"github.com/0xThomas3000/food_delivery/util"
 )
 
@@ -38,8 +41,11 @@ func main() {
 	)
 
 	secretKey := config.SecretKey
+	ps := localpb.NewPubSub()
+	appContext := appctx.NewAppContext(db, s3Provider, secretKey, ps)
 
-	appContext := appctx.NewAppContext(db, s3Provider, secretKey)
+	// Setup subscribers
+	subscriber.Setup(appContext, context.Background())
 
 	r := gin.Default()
 	r.Use(middleware.Recover(appContext))
