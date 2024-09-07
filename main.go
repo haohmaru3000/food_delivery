@@ -3,8 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	socketio "github.com/googollee/go-socket.io"
+	"github.com/googollee/go-socket.io/engineio"
+	"github.com/googollee/go-socket.io/engineio/transport"
+	"github.com/googollee/go-socket.io/engineio/transport/websocket"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
@@ -48,15 +54,169 @@ func main() {
 	_ = subscriber.NewEngine(appContext).Start()
 
 	r := gin.Default()
+
+	// Read 'demo.html' on Server when Client enters 'localhost:8080/demo' in URL
+	// r.StaticFile("/demo", "./demo.html")
+
 	r.Use(middleware.Recover(appContext))
 
 	// Đăng ký link cho cái static để hiển thị hình
 	r.Static("/static", "./static") // Đi search mục "static" => gin sẽ kiếm thư mục "static" để đọc
 
+	// CRUD
 	v1 := r.Group("/v1")
 
 	routes.SetupRoute(appContext, v1)
 	routes.SetupAdminRoute(appContext, v1)
 
-	r.Run()
+	startSocketIOServer(r)
+
+	/* Will fail if placing here because of EOF err */
+	// if err := r.Run(":8080"); err != nil {
+	// 	log.Fatal("failed run app: ", err)
+	// }
+}
+
+func startSocketIOServer(engine *gin.Engine) {
+	server := socketio.NewServer(&engineio.Options{
+		// Two types of Transport: 1. websocket, 2. long polling
+		Transports: []transport.Transport{websocket.Default},
+	})
+
+	// Listen to a namespace "/"(default), then trigger calback function:
+	// 	+ Everytime a Client gets connected to Server, then log that connection.
+	server.OnConnect("/", func(serverSocket socketio.Conn) error {
+		// s.SetContext("")
+		fmt.Println("Socket connected:", serverSocket.ID(), " IP:", serverSocket.RemoteAddr())
+
+		//s.Join("Shipper")
+		//server.BroadcastToRoom("/", "Shipper", "test", "Hello G05")
+
+		ticker := time.NewTicker(time.Second)
+		i := 0
+		// Setup cho server trả về real-time
+		for {
+			<-ticker.C // bị kẹt nếu chưa tick, tick vào sẽ chạy qua (mỗi 1s nó sẽ tick gọi vào channel C)
+			i++
+			// Send data to Client from Server
+			serverSocket.Emit("test", i)
+		}
+
+		// return nil
+	})
+
+	// This way to trigger a callback when error, not return error via Payload or Header...
+	// ex: error when parsing-data process, error at library or error at Transport layer
+	server.OnError("/", func(serverSocket socketio.Conn, e error) {
+		fmt.Println("meet error:", e)
+	})
+
+	// Client is disconnected to Server
+	server.OnDisconnect("/", func(serverSocket socketio.Conn, reason string) {
+		fmt.Println("closed", reason)
+		// Remove socket from socket engine (from app context)
+	})
+
+	// server.OnEvent("/", "authenticate", func(serverSocket socketio.Conn, token string) {
+
+	// 	// Validate token
+	// 	// If false: s.Close(), and return
+
+	// 	// If true
+	// 	// => UserId
+	// 	// Fetch db find user by Id
+	// 	// Here: s belongs to who? (user_id)
+	// 	// We need a map[user_id][]socketio.Conn
+
+	// 	db := appCtx.GetMainDBConnection()
+	// 	store := userstorage.NewSQLStore(db)
+	// 	//
+	// 	tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
+	// 	//
+	// 	payload, err := tokenProvider.Validate(token)
+
+	// 	if err != nil {
+	// 		s.Emit("authentication_failed", err.Error())
+	// 		s.Close()
+	// 		return
+	// 	}
+	// 	//
+	// 	user, err := store.FindUser(context.Background(), map[string]interface{}{"id": payload.UserId})
+	// 	//
+	// 	if err != nil {
+	// 		s.Emit("authentication_failed", err.Error())
+	// 		s.Close()
+	// 		return
+	// 	}
+
+	// 	if user.Status == 0 {
+	// 		s.Emit("authentication_failed", errors.New("you has been banned/deleted"))
+	// 		s.Close()
+	// 		return
+	// 	}
+
+	// 	user.Mask(false)
+
+	// 	s.Emit("your_profile", user)
+	// })
+
+	// Server listening to Client, then event "test" (like Topic in pubsub)
+	server.OnEvent("/", "test", func(serverSocket socketio.Conn, msg string) {
+		log.Println(msg)
+	})
+
+	type Person struct {
+		Name string `json:"name"`
+		Age  int    `json:"age"`
+	}
+
+	server.OnEvent("/", "notice", func(serverSocket socketio.Conn, p Person) {
+		fmt.Println("server receive notice:", p.Name, p.Age)
+
+		p.Age = 33
+		serverSocket.Emit("notice", p)
+
+	})
+
+	server.OnEvent("/", "test", func(serverSocket socketio.Conn, msg string) {
+		fmt.Println("server receive test:", msg)
+	})
+	//
+	//server.OnEvent("/chat", "msg", func(serverSocket socketio.Conn, msg string) string {
+	//	s.SetContext(msg)
+	//	return "recv " + msg
+	//})
+	//
+	//server.OnEvent("/", "bye", func(serverSocket socketio.Conn) string {
+	//	last := s.Context().(string)
+	//	s.Emit("bye", last)
+	//	s.Close()
+	//	return last
+	//})
+	//
+	//server.OnEvent("/", "noteSumit", func(serverSocket socketio.Conn) string {
+	//	last := s.Context().(string)
+	//	s.Emit("bye", last)
+	//	s.Close()
+	//	return last
+	//})
+
+	// go server.Serve() // Listen to web-socket
+	go func() {
+		if err := server.Serve(); err != nil {
+			log.Fatalf("socketio listen error: %s\n", err)
+		}
+	}()
+	defer server.Close()
+
+	// Ko thể đi thẳng lên ở web-socket
+	// => Có thể mượn đường http server để upgrade lên, vì web-socket based on http
+	// ex: gọi sth vào path, then trigger HTTP handler
+	engine.GET("/socket.io/*any", gin.WrapH(server))
+	engine.POST("/socket.io/*any", gin.WrapH(server))
+	engine.StaticFS("/demo", http.Dir("./client"))
+
+	if err := engine.Run(":8080"); err != nil {
+		log.Fatal("failed run app: ", err)
+	}
 }

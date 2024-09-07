@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Demo Food_Delivery socket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <link rel="icon" type="image/png" href="./images/favicon.png" />
+  </head>
+
+  <body>
+    <div id="main">
+      <h1>Demo Socket IO</h1>
+    </div>
+
+    <script>
+      const clientSocket = io("", { transports: ["websocket"] });
+      var locTimer = null;
+
+      clientSocket.on("connect", () => {
+        console.log("Client connected");
+
+        // socket.emit('test', 'Hello server');
+
+        //
+        // socket.emit('notice', {name: "Thomas", age: 35});
+        // // Emit token
+        // socket.emit('authenticate', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjUsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTYyNDM0ODMwMiwiaWF0IjoxNjIxNzU2MzAyfQ.sSciaHm0ykkCdUQKlH1cWdWGZexER0bRPuAW2k33PAE');
+      });
+
+      // socket.on('authenticated', () => {
+      //
+      // })
+
+      // Client listens to 'test' channel on Server (if existed)
+      clientSocket.on("test", (msg) => console.log("test:", msg));
+      clientSocket.on("notice", (p) => console.log("notice:", p));
+
+      clientSocket.on("authenticated", (msg) => {
+        console.log("authenticated", msg);
+
+        if (locTimer != null) {
+          clearInterval(locTimer);
+        }
+
+        locTimer = setInterval(() => {
+          clientSocket.emit("UserUpdateLocation", {
+            lat: 10.7900422,
+            lng: 106.6623443,
+          });
+        }, 3000);
+      });
+
+      clientSocket.on("your_profile", (msg) =>
+        console.log("your profile:", msg)
+      );
+      clientSocket.on("authentication_failed", (msg) =>
+        console.log("authentication_failed:", msg)
+      );
+      // socket.on('NoteCreated', (msg) => console.log('NoteCreated', msg));
+      clientSocket.on("TopicUserLikeRestaurant", (data) =>
+        console.log("TopicUserLikeRestaurant:", data)
+      );
+
+      clientSocket.on("disconnect", () =>
+        console.log("Socket is disconnected")
+      );
+    </script>
+  </body>
+</html>
