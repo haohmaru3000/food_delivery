@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
@@ -88,11 +89,21 @@ func startSocketIOServer(engine *gin.Engine) {
 		// s.SetContext("")
 		fmt.Println("Socket connected:", serverSocket.ID(), " IP:", serverSocket.RemoteAddr())
 
-		//s.Join("Shipper")
+		// Whatever sockets come in, join them into 'Shipper' room
+		// At Client side, they won't know that they were pushed into 'Shipper'
+		serverSocket.Join("Shipper")
+
 		//server.BroadcastToRoom("/", "Shipper", "test", "Hello G05")
 
 		return nil
 	})
+
+	go func() {
+		// Use for range in Channel. Until Channel is closed, the loop will break
+		for range time.NewTicker(time.Second).C {
+			server.BroadcastToRoom("/", "Shipper", "test", "Hi room !")
+		}
+	}()
 
 	// This way to trigger a callback when error, not return error via Payload or Header...
 	// ex: error when parsing-data process, error at library or error at Transport layer
