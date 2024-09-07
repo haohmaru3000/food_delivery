@@ -1,10 +1,11 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
@@ -15,8 +16,10 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/0xThomas3000/food_delivery/components/appctx"
+	"github.com/0xThomas3000/food_delivery/components/tokenprovider/jwt"
 	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
 	"github.com/0xThomas3000/food_delivery/middleware"
+	"github.com/0xThomas3000/food_delivery/module/user/storage"
 	"github.com/0xThomas3000/food_delivery/pubsub/localpb"
 	"github.com/0xThomas3000/food_delivery/routes"
 	"github.com/0xThomas3000/food_delivery/subscriber"
@@ -69,7 +72,7 @@ func main() {
 	routes.SetupRoute(appContext, v1)
 	routes.SetupAdminRoute(appContext, v1)
 
-	startSocketIOServer(r)
+	startSocketIOServer(r, appContext)
 
 	/* Will fail if placing here because of EOF err */
 	// if err := r.Run(":8080"); err != nil {
@@ -77,7 +80,7 @@ func main() {
 	// }
 }
 
-func startSocketIOServer(engine *gin.Engine) {
+func startSocketIOServer(engine *gin.Engine, appCtx appctx.AppContext) {
 	server := socketio.NewServer(&engineio.Options{
 		// Two types of Transport: 1. websocket, 2. long polling
 		Transports: []transport.Transport{websocket.Default},
@@ -98,12 +101,12 @@ func startSocketIOServer(engine *gin.Engine) {
 		return nil
 	})
 
-	go func() {
-		// Use for range in Channel. Until Channel is closed, the loop will break
-		for range time.NewTicker(time.Second).C {
-			server.BroadcastToRoom("/", "Shipper", "test", "Hi room !")
-		}
-	}()
+	// go func() {
+	// 	// Use for range in Channel. Until Channel is closed, the loop will break
+	// 	for range time.NewTicker(time.Second).C {
+	// 		server.BroadcastToRoom("/", "Shipper", "test", "Hi room !")
+	// 	}
+	// }()
 
 	// This way to trigger a callback when error, not return error via Payload or Header...
 	// ex: error when parsing-data process, error at library or error at Transport layer
@@ -117,48 +120,48 @@ func startSocketIOServer(engine *gin.Engine) {
 		// Remove socket from socket engine (from app context)
 	})
 
-	// server.OnEvent("/", "authenticate", func(serverSocket socketio.Conn, token string) {
+	server.OnEvent("/", "authenticate", func(serverSocket socketio.Conn, token string) {
 
-	// 	// Validate token
-	// 	// If false: s.Close(), and return
+		// Validate token
+		// If false: s.Close(), and return
 
-	// 	// If true
-	// 	// => UserId
-	// 	// Fetch db find user by Id
-	// 	// Here: s belongs to who? (user_id)
-	// 	// We need a map[user_id][]socketio.Conn
+		// If true
+		// => UserId
+		// Fetch db find user by Id
+		// Here: s belongs to who? (user_id)
+		// We need a map[user_id][]socketio.Conn
 
-	// 	db := appCtx.GetMainDBConnection()
-	// 	store := userstorage.NewSQLStore(db)
-	// 	//
-	// 	tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
-	// 	//
-	// 	payload, err := tokenProvider.Validate(token)
+		db := appCtx.GetMainDBConnection()
+		store := userstorage.NewSQLStore(db)
+		//
+		tokenProvider := jwt.NewTokenJWTProvider(appCtx.SecretKey())
+		//
+		payload, err := tokenProvider.Validate(token)
 
-	// 	if err != nil {
-	// 		s.Emit("authentication_failed", err.Error())
-	// 		s.Close()
-	// 		return
-	// 	}
-	// 	//
-	// 	user, err := store.FindUser(context.Background(), map[string]interface{}{"id": payload.UserId})
-	// 	//
-	// 	if err != nil {
-	// 		s.Emit("authentication_failed", err.Error())
-	// 		s.Close()
-	// 		return
-	// 	}
+		if err != nil {
+			serverSocket.Emit("authentication_failed", err.Error())
+			serverSocket.Close()
+			return
+		}
+		//
+		user, err := store.FindUser(context.Background(), map[string]interface{}{"id": payload.UserId})
+		//
+		if err != nil {
+			serverSocket.Emit("authentication_failed", err.Error())
+			serverSocket.Close()
+			return
+		}
 
-	// 	if user.Status == 0 {
-	// 		s.Emit("authentication_failed", errors.New("you has been banned/deleted"))
-	// 		s.Close()
-	// 		return
-	// 	}
+		if user.Status == 0 {
+			serverSocket.Emit("authentication_failed", errors.New("you has been banned/deleted"))
+			serverSocket.Close()
+			return
+		}
 
-	// 	user.Mask(false)
+		user.Mask(false)
 
-	// 	s.Emit("your_profile", user)
-	// })
+		serverSocket.Emit("your_profile", user)
+	})
 
 	// Server listening to Client, then event "test" (like Topic in pubsub)
 	server.OnEvent("/", "test", func(serverSocket socketio.Conn, msg interface{}) {
