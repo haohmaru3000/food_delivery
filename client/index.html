@@ -15,22 +15,22 @@
       const clientSocket = io("", { transports: ["websocket"] });
       var locTimer = null;
 
-      clientSocket.on("connect", () => {
+      clientSocket.once("connect", () => {
         console.log("Client connected");
 
-        locTimer = setInterval(() => {
-          clientSocket.emit("test", 10);
-        }, 1000);
+        // locTimer = setInterval(() => {
+        //   clientSocket.emit("test", 10);
+        // }, 1000);
 
-        // socket.emit('test', 'Hello server');
+        // clientSocket.emit('test', 'Hello server');
 
-        //
-        // socket.emit('notice', {name: "Thomas", age: 35});
+        clientSocket.emit("notice", { name: "Thomas", age: 30 });
+
         // // Emit token
-        // socket.emit('authenticate', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjUsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTYyNDM0ODMwMiwiaWF0IjoxNjIxNzU2MzAyfQ.sSciaHm0ykkCdUQKlH1cWdWGZexER0bRPuAW2k33PAE');
+        // clientSocket.emit('authenticate', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjUsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTYyNDM0ODMwMiwiaWF0IjoxNjIxNzU2MzAyfQ.sSciaHm0ykkCdUQKlH1cWdWGZexER0bRPuAW2k33PAE');
       });
 
-      // socket.on('authenticated', () => {
+      // clientSocket.on('authenticated', () => {
       //
       // })
 

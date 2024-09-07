@@ -97,12 +97,12 @@ func startSocketIOServer(engine *gin.Engine) {
 	// This way to trigger a callback when error, not return error via Payload or Header...
 	// ex: error when parsing-data process, error at library or error at Transport layer
 	server.OnError("/", func(serverSocket socketio.Conn, e error) {
-		fmt.Println("meet error:", e)
+		fmt.Println("Meet error:", e)
 	})
 
 	// Client is disconnected to Server
 	server.OnDisconnect("/", func(serverSocket socketio.Conn, reason string) {
-		fmt.Println("closed", reason)
+		fmt.Println("Closed", reason)
 		// Remove socket from socket engine (from app context)
 	})
 
@@ -159,10 +159,12 @@ func startSocketIOServer(engine *gin.Engine) {
 		Age  int    `json:"age"`
 	}
 
+	// Golang's reflex will automatically detect p
+	// If p is of type Struct, then it'll unmarshall byte buffer(is Json string) -> to Person struct
 	server.OnEvent("/", "notice", func(serverSocket socketio.Conn, p Person) {
-		fmt.Println("server receive notice:", p.Name, p.Age)
+		fmt.Println("Server receives notice:", p.Name, p.Age)
 
-		p.Age = 33
+		p.Age = 40
 		serverSocket.Emit("notice", p)
 
 	})
@@ -189,7 +191,7 @@ func startSocketIOServer(engine *gin.Engine) {
 	// go server.Serve() // Listen to web-socket
 	go func() {
 		if err := server.Serve(); err != nil {
-			log.Fatalf("socketio listen error: %s\n", err)
+			log.Fatalf("SocketIO listen error: %s\n", err)
 		}
 	}()
 	defer server.Close()
@@ -202,6 +204,6 @@ func startSocketIOServer(engine *gin.Engine) {
 	engine.StaticFS("/demo", http.Dir("./client"))
 
 	if err := engine.Run(":8080"); err != nil {
-		log.Fatal("failed run app: ", err)
+		log.Fatal("Failed run app: ", err)
 	}
 }
