@@ -18,6 +18,10 @@
       clientSocket.on("connect", () => {
         console.log("Client connected");
 
+        locTimer = setInterval(() => {
+          clientSocket.emit("test", 10);
+        }, 1000);
+
         // socket.emit('test', 'Hello server');
 
         //
@@ -36,18 +40,17 @@
 
       clientSocket.on("authenticated", (msg) => {
         console.log("authenticated", msg);
-
-        if (locTimer != null) {
-          clearInterval(locTimer);
-        }
-
-        locTimer = setInterval(() => {
-          clientSocket.emit("UserUpdateLocation", {
-            lat: 10.7900422,
-            lng: 106.6623443,
-          });
-        }, 3000);
       });
+
+      // if (locTimer != null) {
+      //   clearInterval(locTimer);
+      // }
+      // locTimer = setInterval(() => {
+      //   clientSocket.emit("UserUpdateLocation", {
+      //     lat: 10.7900422,
+      //     lng: 106.6623443,
+      //   });
+      // }, 3000);
 
       clientSocket.on("your_profile", (msg) =>
         console.log("your profile:", msg)

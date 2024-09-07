@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
@@ -92,17 +91,7 @@ func startSocketIOServer(engine *gin.Engine) {
 		//s.Join("Shipper")
 		//server.BroadcastToRoom("/", "Shipper", "test", "Hello G05")
 
-		ticker := time.NewTicker(time.Second)
-		i := 0
-		// Setup cho server trả về real-time
-		for {
-			<-ticker.C // bị kẹt nếu chưa tick, tick vào sẽ chạy qua (mỗi 1s nó sẽ tick gọi vào channel C)
-			i++
-			// Send data to Client from Server
-			serverSocket.Emit("test", i)
-		}
-
-		// return nil
+		return nil
 	})
 
 	// This way to trigger a callback when error, not return error via Payload or Header...
@@ -161,8 +150,8 @@ func startSocketIOServer(engine *gin.Engine) {
 	// })
 
 	// Server listening to Client, then event "test" (like Topic in pubsub)
-	server.OnEvent("/", "test", func(serverSocket socketio.Conn, msg string) {
-		log.Println(msg)
+	server.OnEvent("/", "test", func(serverSocket socketio.Conn, msg interface{}) {
+		log.Println("test:", msg)
 	})
 
 	type Person struct {
@@ -178,10 +167,6 @@ func startSocketIOServer(engine *gin.Engine) {
 
 	})
 
-	server.OnEvent("/", "test", func(serverSocket socketio.Conn, msg string) {
-		fmt.Println("server receive test:", msg)
-	})
-	//
 	//server.OnEvent("/chat", "msg", func(serverSocket socketio.Conn, msg string) string {
 	//	s.SetContext(msg)
 	//	return "recv " + msg
