@@ -5,6 +5,7 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
 	"github.com/0xThomas3000/food_delivery/pubsub"
+	"github.com/0xThomas3000/food_delivery/skio"
 )
 
 type AppContext interface {
@@ -12,6 +13,7 @@ type AppContext interface {
 	UploadProvider() uploadprovider.UploadProvider
 	SecretKey() string
 	GetPubsub() pubsub.Pubsub
+	GetRealtimeEngine() skio.RealtimeEngine
 }
 
 // A struct that implements "AppContext" interface
@@ -20,6 +22,7 @@ type appCtx struct {
 	uploadprovider uploadprovider.UploadProvider
 	secretKey      string
 	ps             pubsub.Pubsub
+	rtEngine       skio.RealtimeEngine
 }
 
 // Setters for setting 2 fields of "db", "uploadprovider"
@@ -36,18 +39,10 @@ func NewAppContext(
 }
 
 // Getters to get 2 fields of "db", "uploadprovider"
-func (ctx *appCtx) GetMainDBConnection() *gorm.DB {
-	return ctx.db
-}
+func (ctx *appCtx) GetMainDBConnection() *gorm.DB                 { return ctx.db }
+func (ctx *appCtx) UploadProvider() uploadprovider.UploadProvider { return ctx.uploadprovider }
+func (ctx *appCtx) SecretKey() string                             { return ctx.secretKey }
+func (ctx *appCtx) GetPubsub() pubsub.Pubsub                      { return ctx.ps }
+func (ctx *appCtx) GetRealtimeEngine() skio.RealtimeEngine        { return ctx.rtEngine }
 
-func (ctx *appCtx) UploadProvider() uploadprovider.UploadProvider {
-	return ctx.uploadprovider
-}
-
-func (ctx *appCtx) SecretKey() string {
-	return ctx.secretKey
-}
-
-func (ctx *appCtx) GetPubsub() pubsub.Pubsub {
-	return ctx.ps
-}
+func (ctx *appCtx) SetRealtimeEngine(rt skio.RealtimeEngine) { ctx.rtEngine = rt }

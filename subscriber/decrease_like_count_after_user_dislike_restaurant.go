@@ -24,7 +24,9 @@ import (
 // 	}()
 // }
 
-func DecreaseLikecountAfterUserDislikeRestaurant(appCtx appctx.AppContext) consumerJob {
+func DecreaseLikecountAfterUserDislikeRestaurant(
+	appCtx appctx.AppContext,
+) consumerJob {
 	return consumerJob{
 		Title: "Decrease like-count after user dislikes restaurant",
 		Hld: func(ctx context.Context, message *pubsub.Message) error {

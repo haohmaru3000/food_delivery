@@ -43,6 +43,17 @@
 
       clientSocket.on("authenticated", (msg) => {
         console.log("authenticated", msg);
+
+        if (locTimer != null) {
+          clearInterval(locTimer);
+        }
+
+        locTimer = setInterval(() => {
+          clientSocket.emit("UserUpdateLocation", {
+            lat: 10.7900422,
+            lng: 106.6623443,
+          });
+        }, 3000);
       });
 
       // if (locTimer != null) {

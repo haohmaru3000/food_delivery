@@ -20,7 +20,9 @@ type consumerEngine struct {
 }
 
 func NewEngine(appContext appctx.AppContext) *consumerEngine {
-	return &consumerEngine{appCtx: appContext}
+	return &consumerEngine{
+		appCtx: appContext,
+	}
 }
 
 func (engine *consumerEngine) Start() error {
@@ -29,6 +31,7 @@ func (engine *consumerEngine) Start() error {
 		true,
 		IncreaseLikecountAfterUserLikeRestaurant(engine.appCtx),
 		PushNotificationWhenUserLikeRestaurant(engine.appCtx),
+		EmitRealtimeAfterUserLikeRestaurant(engine.appCtx),
 	)
 
 	engine.startSubTopic(
