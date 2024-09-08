@@ -8,11 +8,11 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/middleware"
-	"github.com/0xThomas3000/food_delivery/module/restaurant/model"
-	"github.com/0xThomas3000/food_delivery/module/restaurant/transport/ginrestaurant"
-	"github.com/0xThomas3000/food_delivery/module/restaurantlike/transport/ginrstlike"
-	"github.com/0xThomas3000/food_delivery/module/upload/transport/ginupload"
-	"github.com/0xThomas3000/food_delivery/module/user/transport/ginuser"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/model"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/transport/ginrestaurant"
+	"github.com/0xThomas3000/food_delivery/modules/restaurantlike/transport/ginrstlike"
+	"github.com/0xThomas3000/food_delivery/modules/upload/transport/ginupload"
+	"github.com/0xThomas3000/food_delivery/modules/user/transport/ginuser"
 )
 
 func SetupRoute(appContext appctx.AppContext, v1 *gin.RouterGroup) {

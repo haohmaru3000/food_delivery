@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/0xThomas3000/food_delivery/components/appctx"
-	"github.com/0xThomas3000/food_delivery/module/restaurant/storage"
+	"github.com/0xThomas3000/food_delivery/modules/restaurant/storage"
 	"github.com/0xThomas3000/food_delivery/pubsub"
 )
 

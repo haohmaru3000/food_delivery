@@ -19,7 +19,7 @@ import (
 	"github.com/0xThomas3000/food_delivery/components/tokenprovider/jwt"
 	"github.com/0xThomas3000/food_delivery/components/uploadprovider"
 	"github.com/0xThomas3000/food_delivery/middleware"
-	"github.com/0xThomas3000/food_delivery/module/user/storage"
+	"github.com/0xThomas3000/food_delivery/modules/user/storage"
 	"github.com/0xThomas3000/food_delivery/pubsub/localpb"
 	"github.com/0xThomas3000/food_delivery/routes"
 	"github.com/0xThomas3000/food_delivery/subscriber"

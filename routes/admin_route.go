@@ -5,7 +5,7 @@ import (
 
 	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/middleware"
-	"github.com/0xThomas3000/food_delivery/module/user/transport/ginuser"
+	"github.com/0xThomas3000/food_delivery/modules/user/transport/ginuser"
 )
 
 func SetupAdminRoute(appContext appctx.AppContext, v1 *gin.RouterGroup) {

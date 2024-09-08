@@ -10,8 +10,8 @@ import (
 	"github.com/0xThomas3000/food_delivery/common"
 	"github.com/0xThomas3000/food_delivery/components/appctx"
 	"github.com/0xThomas3000/food_delivery/components/tokenprovider/jwt"
-	"github.com/0xThomas3000/food_delivery/module/user/model"
-	"github.com/0xThomas3000/food_delivery/module/user/storage"
+	"github.com/0xThomas3000/food_delivery/modules/user/model"
+	"github.com/0xThomas3000/food_delivery/modules/user/storage"
 )
 
 type AuthenStore interface {
